@@ -1,3 +1,5 @@
+use serde::{Serialize, Deserialize};
+
 /// An enum for all Pokemon Types.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum PokemonType {
