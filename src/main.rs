@@ -1,19 +1,16 @@
-pub mod pokemon;
-pub mod types;
-
-use pokemon::species::Species;
+use bevy::prelude::*;
 
 fn main() {
-    let path = "data/pokemon/bulbasaur.json";
-	match Species::from_json_file(path, None, None) {
-		Ok(species) => {
-			println!("Species: {}", species.name);
-			if let Some(variant) = &species.selected_variant {
-				println!("Selected Variant: {}", variant);
-			} else {
-				println!("No variant selected.");
-			}
-		}
-		Err(e) => println!("Error loading species: {}", e),
-	}
+	App::new()
+		.add_plugins(
+			DefaultPlugins.set(WindowPlugin {
+				primary_window: Some(Window {
+					title: "Pokemon: Rust Version".to_string(),
+					resolution: (1920.0, 1080.0).into(),
+					..default()
+				}),
+				..default()
+			})
+		)
+		.run();
 }
