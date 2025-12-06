@@ -1,9 +1,11 @@
-use bevy::asset::load_internal_binary_asset;
 use bevy::prelude::*;
+use crate::resources::fonts::GameFonts;
+use crate::resources::states::GameState;
 use crate::systems::startup::*;
 use crate::systems::transitions::*;
 
 mod components;
+mod resources;
 mod systems;
 
 fn main() {
@@ -20,14 +22,16 @@ fn main() {
 	app.add_plugins(DefaultPlugins.set(window));
 	app.insert_resource(ClearColor(Color::BLACK));
 
-	load_internal_binary_asset!(
-		app,
-		TextFont::default().font,
-		"../assets/fonts/pokemon_gb.ttf",
-		|bytes: &[u8], _path: String| { Font::try_from_bytes(bytes.to_vec()).unwrap() }
-	);
+	app.init_resource::<GameFonts>();
+	app.init_state::<GameState>();
+	app.insert_resource(NextState::<GameState>::default());
 
-	app.add_systems(Startup, opening_sequence);
+	app.add_systems(OnEnter(GameState::Loading), setup_game_fonts_system);
+	app.add_systems(Update, check_game_fonts_system.run_if(in_state(GameState::Loading)));
+
+	app.add_systems(Startup, startup_system);
+	app.add_systems(OnEnter(GameState::Copyright), copyright_screen);
+	app.add_systems(OnEnter(GameState::OpeningScene), opening_scene);
 	app.add_systems(Update, fade_system::<TextColor>);
 
 	app.run();

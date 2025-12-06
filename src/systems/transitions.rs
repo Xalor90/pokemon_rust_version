@@ -44,14 +44,14 @@ pub fn fade_system<T: Component + WithColor>(
 				}
 			}
 
-			FadeMode::InOnly => {
-				continue;
-			}
+//			FadeMode::InOnly => {
+//				continue;
+//			}
 
-			FadeMode::OutOnly => {
-				commands.entity(entity).despawn();
-				continue;
-			}
+//			FadeMode::OutOnly => {
+//				commands.entity(entity).despawn();
+//				continue;
+//			}
 		}
 	}
 }

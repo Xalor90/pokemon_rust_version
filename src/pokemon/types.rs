@@ -34,7 +34,7 @@ pub enum DamageModifier {
 
 impl DamageModifier {
 	/// Returns the multiplier for the damage modifier.
-	pub fn multiplier(self) -> f32 {
+	pub fn multiplier(&self) -> f32 {
 		match self {
 			DamageModifier::NoEffect => 0.0,
 			DamageModifier::NotVeryEffective => 0.5,
