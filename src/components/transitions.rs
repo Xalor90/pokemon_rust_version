@@ -5,7 +5,7 @@ use std::time::Duration;
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum FadeMode {
 	InHoldOut,
-//	InOnly,
+	InOnly,
 //	OutOnly,
 }
 
@@ -40,15 +40,15 @@ impl FadeTransition {
 	}
 
 	// Fade in only (stays visible)
-//	pub fn fade_in_only(fade_secs: f32) -> Self {
-//		Self {
-//			mode: FadeMode::InOnly,
-//			current_state: FadeState::In,
-//			timer: Timer::from_seconds(fade_secs, TimerMode::Once),
-//			duration: Duration::from_secs_f32(fade_secs),
-//			hold: None,
-//		}
-//	}
+	pub fn fade_in_only(fade_secs: f32) -> Self {
+		Self {
+			mode: FadeMode::InOnly,
+			current_state: FadeState::In,
+			timer: Timer::from_seconds(fade_secs, TimerMode::Once),
+			duration: Duration::from_secs_f32(fade_secs),
+			hold: None,
+		}
+	}
 
 	// Fade out only (despawn at end)
 //	pub fn fade_out_only(fade_secs: f32) -> Self {
