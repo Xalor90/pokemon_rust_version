@@ -20,6 +20,6 @@ pub fn opening_sequence_system(
 	mut commands: Commands,
 	window_settings: Res<WindowSettings>,
 ) {
-	// Run opening sequence animation
+	// Render background
 	commands.spawn(BackgroundBundle::new(&window_settings));
 }

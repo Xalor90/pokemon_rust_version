@@ -49,8 +49,8 @@ impl CopyrightTextBundle {
 /// Implementation for BackgroundBundle
 impl BackgroundBundle {
 	pub fn new(window_settings: &WindowSettings) -> Self {
-		let background_height = window_settings.window_size.y * 3.0 / 5.0;
-		let background_width = window_settings.window_size.x;
+		let background_height = window_settings.virtual_resolution.y * 3.0 / 5.0;
+		let background_width = window_settings.virtual_resolution.x;
 
 		Self {
 			sprite: Sprite {

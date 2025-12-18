@@ -25,7 +25,8 @@ fn main() {
 	let window = WindowPlugin {
 		primary_window: Some(Window {
 			title: WindowSettings::default().window_title,
-			resolution: WindowSettings::default().window_size.into(),
+			mode: WindowSettings::default().window_mode,
+			present_mode: WindowSettings::default().present_mode,
 			..default()
 		}),
 		..default()

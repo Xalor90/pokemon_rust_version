@@ -1,6 +1,7 @@
 use bevy::prelude::*;
-use crate::components::startup::InitialCameraBundle;
+use crate::components::startup::StartupCameraBundle;
 use crate::resources::fonts::GameFonts;
+use crate::resources::settings::WindowSettings;
 use crate::resources::states::GameState;
 
 /// Startup system for setting up the game fonts
@@ -27,6 +28,6 @@ pub fn check_game_fonts_system(
 }
 
 /// Startup system
-pub fn startup_system(mut commands: Commands) {
-	commands.spawn(InitialCameraBundle::default());
+pub fn startup_system(mut commands: Commands, settings: Res<WindowSettings>) {
+	commands.spawn(StartupCameraBundle::new(settings.virtual_resolution));
 }

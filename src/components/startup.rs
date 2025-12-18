@@ -1,28 +1,36 @@
 use bevy::prelude::*;
+use bevy::render::camera::{Projection, ScalingMode};
 
 /// Marker component for the startup camera
 #[derive(Component)]
 pub struct StartupCamera;
 
-/// Bundle for the initial camera used at startup
+/// Bundle for the startup camera
 #[derive(Bundle)]
-pub struct InitialCameraBundle {
+pub struct StartupCameraBundle {
 	pub marker: StartupCamera,
-	pub camera: Camera2d,
-	pub camera_transform: Transform,
+	pub camera: Camera,
+	pub camera_2d: Camera2d,
+	pub projection: Projection,
+	pub transform: Transform,
 }
 
-/// Default implementation for InitialCameraBundle
-impl Default for InitialCameraBundle {
-	fn default() -> Self {
+/// Implementation for StartupCameraBundle
+impl StartupCameraBundle {
+	pub fn new(virtual_resolution: Vec2) -> Self {
 		Self {
 			marker: StartupCamera,
-			camera: Camera2d {
+			camera: Camera {
 				..default()
 			},
-			camera_transform: Transform {
-				..default()
-			},
+			camera_2d: Camera2d,
+			projection: Projection::Orthographic(OrthographicProjection {
+				scaling_mode: ScalingMode::FixedVertical {
+					viewport_height: virtual_resolution.y,
+				},
+				..OrthographicProjection::default_2d()
+			}),
+			transform: Transform::default(),
 		}
 	}
 }
