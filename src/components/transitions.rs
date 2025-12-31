@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use std::time::Duration;
 
-/// Transition Enums
+/// Fade modes for transitions
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum FadeMode {
 	InHoldOut,
@@ -9,6 +9,7 @@ pub enum FadeMode {
 //	OutOnly,
 }
 
+/// Fade states for transitions
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum FadeState {
 	In,
@@ -16,7 +17,7 @@ pub enum FadeState {
 	Out,
 }
 
-/// Transition Components
+/// Fade transition component
 #[derive(Component)]
 pub struct FadeTransition {
 	pub mode: FadeMode,
@@ -26,9 +27,19 @@ pub struct FadeTransition {
 	pub hold: Option<Duration>,
 }
 
-/// Transition Implementations
+/// Trait for components with color
+pub trait WithColor {
+	fn color_mut(&mut self) -> &mut Color;
+}
+
+/// Trait for getting the percentage of a timer's duration that has elapsed
+pub trait TimerPercent {
+	fn percent(&self) -> f32;
+}
+
+/// Fade transition implementations
 impl FadeTransition {
-	/// Full fade cycle, including fade-in, hold, and fade-out
+	// Full fade cycle, including fade-in, hold, and fade-out
 	pub fn full_cycle(fade_secs: f32, hold_secs: f32) -> Self {
 		Self {
 			mode: FadeMode::InHoldOut,
@@ -62,22 +73,7 @@ impl FadeTransition {
 //	}
 }
 
-/// Traits
-pub trait WithColor {
-	fn color_mut(&mut self) -> &mut Color;
-}
-
-pub trait TimerPercent {
-	fn percent(&self) -> f32;
-}
-
-/// Trait implementations
-impl WithColor for TextColor {
-	fn color_mut(&mut self) -> &mut Color {
-		&mut self.0
-	}
-}
-
+/// Implementation of the TimerPercent trait for Timer
 impl TimerPercent for Timer {
 	fn percent(&self) -> f32 {
 		let elapsed = self.elapsed().as_secs_f32();

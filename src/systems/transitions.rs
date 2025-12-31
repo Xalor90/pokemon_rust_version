@@ -1,9 +1,7 @@
 use bevy::{ecs::component::Mutable, prelude::*};
 
-use crate::components::opening_sequence::CopyrightFade;
 use crate::components::transitions::{FadeTransition, FadeMode, FadeState, WithColor, TimerPercent};
 use crate::events::transitions::FadeCompletedEvent;
-use crate::resources::states::GameState;
 
 /// System for handling fade transitions between screens
 pub fn fade_system<T: Component + WithColor>(
@@ -49,6 +47,7 @@ pub fn fade_system<T: Component + WithColor>(
 			}
 
 			FadeMode::InOnly => {
+				writer.write(FadeCompletedEvent { entity });
 				continue;
 			}
 
@@ -56,25 +55,6 @@ pub fn fade_system<T: Component + WithColor>(
 //				writer.write(FadeCompletedEvent { entity });
 //				continue;
 //			}
-		}
-	}
-}
-
-/// System to handle fade completed events
-pub fn handle_fade_completed_event_system(
-	mut commands: Commands,
-	mut events: EventReader<FadeCompletedEvent>,
-	mut next_state: ResMut<NextState<GameState>>,
-	query: Query<&CopyrightFade>,
-) {
-	for event in events.read() {
-		// Despawn the entity
-		commands.entity(event.entity).despawn();
-
-		// Check if the entity is a copyright fade entity
-		if query.get(event.entity).is_ok() {
-			// Transition to the next state after fade is complete
-			next_state.set(GameState::OpeningSequence);
 		}
 	}
 }

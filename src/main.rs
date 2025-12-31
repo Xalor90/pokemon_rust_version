@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 
+use crate::components::opening_sequence::{OpeningSequenceSystemSet, OpeningBackgroundColor};
 use crate::events::transitions::FadeCompletedEvent;
 use crate::resources::settings::WindowSettings;
 use crate::resources::fonts::GameFonts;
@@ -39,13 +40,26 @@ fn main() {
 	app.init_state::<GameState>();
 	app.insert_resource(NextState::<GameState>::default());
 
+	// Configure Sets
+	app.configure_sets(Update, (
+		OpeningSequenceSystemSet::Fade,
+		OpeningSequenceSystemSet::Sync.after(OpeningSequenceSystemSet::Fade),
+	));
+
 	// Register Events
 	app.add_event::<FadeCompletedEvent>();
 
 	// Add Update Systems
 	app.add_systems(Update, check_game_fonts_system.run_if(in_state(GameState::Startup)));
 	app.add_systems(Update, fade_system::<TextColor>);
-	app.add_systems(Update, handle_fade_completed_event_system);
+	app.add_systems(Update, (
+		fade_system::<OpeningBackgroundColor>.in_set(OpeningSequenceSystemSet::Fade),
+		sync_background_color_to_sprite_system.in_set(OpeningSequenceSystemSet::Sync),
+	));
+	app.add_systems(Update, (
+		handle_copyright_fade_completed_event_system,
+		handle_background_fade_completed_event_system.in_set(OpeningSequenceSystemSet::Sync),
+	));
 
 	// Add Startup Systems
 	app.add_systems(OnEnter(GameState::Startup), setup_game_fonts_system);
@@ -53,7 +67,10 @@ fn main() {
 
 	// Add Opening Sequence Systems
 	app.add_systems(OnEnter(GameState::CopyrightScreen), copyright_screen_system);
-	app.add_systems(OnEnter(GameState::OpeningSequence), opening_sequence_system);
+	app.add_systems(OnEnter(GameState::OpeningSequence), (
+		load_opening_sequence_sprites_system,
+		opening_sequence_system.after(load_opening_sequence_sprites_system)
+	));
 
 	// Run the app
 	app.run();

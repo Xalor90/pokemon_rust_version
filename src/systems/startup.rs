@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+
 use crate::components::startup::StartupCameraBundle;
 use crate::resources::fonts::GameFonts;
 use crate::resources::settings::WindowSettings;
